@@ -25,7 +25,10 @@ public class Main {
                     deleteContact();
                     break;
                 case 4:
-                    System.out.println("Search contact");
+                    searchContact();
+                    break;
+                case 5:
+                    editContact();
                     break;
                 case 0:
                     isQuit = true;
@@ -43,6 +46,7 @@ public class Main {
         System.out.println("2. Contact List");
         System.out.println("3. Delete Contact");
         System.out.println("4. Search Contact");
+        System.out.println("5. Edit Contact");
         System.out.println("0. Exit");
 
     }
@@ -110,6 +114,45 @@ public class Main {
         if (deletedRow != 0){
             System.out.println("Contact deleted!");
         }else{
+            System.out.println("Contact not found!");
+        }
+    }
+
+    public static void searchContact(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your query: ");
+        String query = sc.next();
+        ContactRepository cr = new ContactRepository();
+        List<Contact> contactList = cr.searchContact(query);
+
+        if (contactList.isEmpty()){
+            System.out.println("No contacts found!");
+        }else{
+            for (int i=0; i< contactList.size(); i++) {
+                Contact contact = contactList.get(i);
+                System.out.println((i+1) + ". " + contact.getName() + " "
+                + contact.getSurname() + " " + contact.getPhone());
+            }
+        }
+    }
+
+    public static void editContact(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter contact name: ");
+        String name = sc.next();
+        System.out.print("Enter contact surname: ");
+        String surname = sc.next();
+        System.out.print("Enter contact phone number: ");
+        String phone = sc.next();
+        Contact contact = new Contact();
+        contact.setName(name);
+        contact.setSurname(surname);
+        contact.setPhone(phone);
+
+        ContactRepository cr = new ContactRepository();
+        if (cr.editContact(contact)){
+            System.out.println("Contact updated!");
+        }else {
             System.out.println("Contact not found!");
         }
     }
